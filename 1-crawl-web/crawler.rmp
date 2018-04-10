@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.6.001">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="7.6.001" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="web:process_web_modern" compatibility="7.3.000" expanded="true" height="68" name="Process Documents from Web" width="90" x="179" y="34">
+        <parameter key="url" value="https://www.independent.ie/sport/"/>
+        <list key="crawling_rules">
+          <parameter key="store_with_matching_url" value=".*six-nations.*"/>
+          <parameter key="follow_link_with_matching_url" value=".*six-nations.*"/>
+        </list>
+        <parameter key="max_crawl_depth" value="1"/>
+        <parameter key="retrieve_as_html" value="false"/>
+        <parameter key="enable_basic_auth" value="false"/>
+        <parameter key="add_content_as_attribute" value="false"/>
+        <parameter key="max_pages" value="50"/>
+        <parameter key="max_page_size" value="1000"/>
+        <parameter key="delay" value="200"/>
+        <parameter key="max_concurrent_connections" value="100"/>
+        <parameter key="max_connections_per_host" value="100"/>
+        <parameter key="user_agent" value="rapidminer-web-mining-extension-crawler"/>
+        <parameter key="ignore_robot_exclusion" value="false"/>
+        <process expanded="true">
+          <operator activated="true" class="web:extract_html_text_content" compatibility="7.3.000" expanded="true" height="68" name="Extract Content (2)" width="90" x="112" y="136">
+            <parameter key="extract_content" value="true"/>
+            <parameter key="minimum_text_block_length" value="5"/>
+            <parameter key="override_content_type_information" value="true"/>
+            <parameter key="neglegt_span_tags" value="true"/>
+            <parameter key="neglect_p_tags" value="true"/>
+            <parameter key="neglect_b_tags" value="true"/>
+            <parameter key="neglect_i_tags" value="true"/>
+            <parameter key="neglect_br_tags" value="true"/>
+            <parameter key="ignore_non_html_tags" value="true"/>
+          </operator>
+          <operator activated="true" class="text:write_document" compatibility="7.5.000" expanded="true" height="82" name="Write Document (2)" width="90" x="246" y="136">
+            <parameter key="overwrite" value="true"/>
+            <parameter key="encoding" value="SYSTEM"/>
+          </operator>
+          <operator activated="true" class="write_file" compatibility="7.6.001" expanded="true" height="68" name="Write File (2)" width="90" x="380" y="136">
+            <parameter key="resource_type" value="file"/>
+            <parameter key="filename" value="/Users/dairehoman/BN104/TEXT_ANA/assignment/test-data/crawler-output/rbs6nat/output.txt"/>
+            <parameter key="mime_type" value="application/octet-stream"/>
+          </operator>
+          <connect from_port="document" to_op="Extract Content (2)" to_port="document"/>
+          <connect from_op="Extract Content (2)" from_port="document" to_op="Write Document (2)" to_port="document"/>
+          <connect from_op="Write Document (2)" from_port="file" to_op="Write File (2)" to_port="file"/>
+          <connect from_op="Write File (2)" from_port="file" to_port="document 1"/>
+          <portSpacing port="source_document" spacing="0"/>
+          <portSpacing port="sink_document 1" spacing="0"/>
+          <portSpacing port="sink_document 2" spacing="0"/>
+        </process>
+      </operator>
+      <connect from_op="Process Documents from Web" from_port="example set" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <description align="left" color="yellow" colored="false" height="568" resized="true" width="519" x="36" y="179">My Web Mining Process&lt;br&gt;&lt;br&gt;&amp;gt; **** blockchain *****&lt;br&gt;ROOT_URL = https://www.siliconrepublic.com/search-results?q=blockchain&lt;br&gt;REGEX = .*blockchain.*&lt;br&gt;OUTPUT= assignment/test-data/crawler-output/blockchain/output.txt&lt;br&gt;&lt;br&gt;- I used regexs to download &amp;amp; store articles that contained the word 'blockchain' in the url&lt;br&gt;&lt;br&gt;&amp;gt; ***** cryptocurrency *****&lt;br&gt;ROOT_URL = https://www.coindesk.com/?s=cryptocurrency&lt;br&gt;REGEX = .*cryptocurrency.*&lt;br&gt;OUTPUT= assignment/test-data/crawler-output/cryptocurrency/output.txt&lt;br&gt;&lt;br&gt;- I used regexs to download &amp;amp; store articles that contained the word 'cryptocurrency' in the url&lt;br&gt;&lt;br&gt;&amp;gt; **** rbs 6 nations *****&lt;br&gt;ROOT_URL = https://www.independent.ie/sport/&lt;br&gt;REGEX = .*six-nations.*&lt;br&gt;OUTPUT= assignment/test-data/crawler-output/rbs6nat/output.txt&lt;br&gt;&lt;br&gt;- I used regexs to download &amp;amp; store articles that contained the phrase 'six-nations' in the url&lt;br&gt;&lt;br&gt;I then copy and pasted and exerpt from each 'output.txt' file and added it into the training data folders for the corresponding topic.&lt;br/&gt;output for blockchain will be b10.txt&lt;br/&gt;output for cryptocurrency will be c10.txt&lt;br/&gt;output for rbs 6 nations will be r10.txt&lt;br&gt;&lt;br&gt;</description>
+    </process>
+  </operator>
+</process>
